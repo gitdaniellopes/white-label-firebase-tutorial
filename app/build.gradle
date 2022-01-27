@@ -37,6 +37,42 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    //Para poder habilitar os flavors do projeto
+    //preciso colocar uma dimensão como obrigatoriedade
+
+    //side represente um admin ou um cliente, mas posso dar qualquer nome
+
+    // aqui estamos criando mais de uma dimensão, por que serão dois apps
+    //um sobre carros e outro sobre bicicleta
+
+    //applicationId para cada um dos flavors, para separar qual app é qual
+
+    //No AndroidManifest é onde vamos definir os nomes dos flavors
+    // quando instalar o admin, aparecer o icone do admin, e assim por diante
+
+    productFlavors {
+        flavorDimensions 'product', 'side'
+        bike {
+            dimension 'product'
+            applicationIdSuffix '.bike'
+            manifestPlaceholders.appName = "Bike"
+        }
+        car {
+            dimension 'product'
+            applicationIdSuffix '.car'
+            manifestPlaceholders.appName = "Car"
+        }
+        client {
+            dimension 'side'
+            manifestPlaceholders.appNameSuffix = ""
+        }
+        admin {
+            dimension 'side'
+            applicationIdSuffix '.admin'
+            manifestPlaceholders.appNameSuffix = ".Admin"
+        }
+    }
 }
 
 dependencies {
