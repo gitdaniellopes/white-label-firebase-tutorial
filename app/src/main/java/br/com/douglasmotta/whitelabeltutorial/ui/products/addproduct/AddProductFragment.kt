@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.Fragment
 import br.com.douglasmotta.whitelabeltutorial.databinding.AddProductFragmentBinding
 import br.com.douglasmotta.whitelabeltutorial.util.CurrencyTextWatcher
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputLayout
 
 class AddProductFragment : BottomSheetDialogFragment() {
 
@@ -35,7 +35,27 @@ class AddProductFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        observers()
         setListeners()
+    }
+
+    private fun observers() {
+        viewModel.imageUriErrorResId.observe(viewLifecycleOwner) { drawableResId ->
+            binding.imageView2.setBackgroundResource(drawableResId)
+        }
+        viewModel.descriptionFieldErrorResId.observe(viewLifecycleOwner) { stringResId ->
+            binding.inputLayoutDescription.setError(stringResId)
+        }
+        viewModel.priceFieldErrorResId.observe(viewLifecycleOwner) { stringResId ->
+            binding.inputLayoutPrice.setError(stringResId)
+        }
+    }
+
+    private fun TextInputLayout.setError(stringResId: Int?) {
+        error = if (stringResId != null) {
+            getString(stringResId)
+        } else null
     }
 
     private fun setListeners() {
@@ -46,6 +66,8 @@ class AddProductFragment : BottomSheetDialogFragment() {
         binding.buttonAddProduct.setOnClickListener {
             val description = binding.inputDescription.text.toString().trim()
             val price = binding.inputPrice.text.toString().trim()
+
+            viewModel.createProduct(description, price, imageUri)
         }
 
         binding.inputPrice.run {
