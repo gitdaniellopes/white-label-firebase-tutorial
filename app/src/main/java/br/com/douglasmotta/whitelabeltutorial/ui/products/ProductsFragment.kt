@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import br.com.douglasmotta.whitelabeltutorial.databinding.FragmentProductsBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class ProductsFragment : BottomSheetDialogFragment() {
+class ProductsFragment : Fragment() {
 
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
