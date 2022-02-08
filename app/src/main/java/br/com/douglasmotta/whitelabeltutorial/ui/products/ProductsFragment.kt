@@ -39,7 +39,7 @@ class ProductsFragment : Fragment() {
         setListeners()
         observeNavBackStack()
         observers()
-        viewModel.getProducts()
+        getProducts()
     }
 
     private fun setupRecycleView() {
@@ -49,10 +49,18 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun setListeners() {
-        binding.fabAdd.setOnClickListener {
+    private fun setListeners() = with(binding) {
+        swipeProducts.setOnRefreshListener {
+            getProducts()
+        }
+
+        fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_productsFragment_to_addProductFragment)
         }
+    }
+
+    private fun getProducts() {
+        viewModel.getProducts()
     }
 
     private fun observeNavBackStack() {
@@ -85,6 +93,7 @@ class ProductsFragment : Fragment() {
 
     private fun observers() {
         viewModel.productsData.observe(viewLifecycleOwner) { products ->
+            binding.swipeProducts.isRefreshing = false
             productsAdapter.submitList(products)
         }
         viewModel.addButtonVisibilityData.observe(viewLifecycleOwner) { visibility ->
